@@ -1,6 +1,7 @@
 import React, { Component } from "react"
-// import logo from './logo.svg'
-// import './App.css'
+import TodoBannner from './components/TodoBanner'
+import TodoCreator from './components/TodoCreator'
+import TodoRow from './components/TodoRow'
 
 export default class App extends Component {
 
@@ -13,7 +14,7 @@ export default class App extends Component {
         { action: "Get Shoes", done: false },
         { action: "Collect Tickets", done: true },
         { action: "Call Joe", done: false }],
-      newItemText: ""
+      // newItemText: ""
     }
   }
 
@@ -23,12 +24,12 @@ export default class App extends Component {
     })
   }
 
-  createNewTodo = () => {
+  createNewTodo = (task) => {
     if (!this.state.todoItems
-              .find(item => item.action === this.state.newItemText)) {
+              .find(item => item.action === task)) {
       this.setState({
         todoItems: [...this.state.todoItems, 
-            { action: this.state.newItemText, done: false }],
+            { action: task, done: false }],
         newItemText: ""
       })
     }
@@ -40,32 +41,15 @@ export default class App extends Component {
             item.action === todo.action ? { ...item, done: !item.done } : item )
     })
   }
+  
   todoTableRows = () => this.state.todoItems.map(item => 
-      <tr key={ item.action }>
-        <td>{ item.action }</td>
-        <td>
-          <input type="checkbox" 
-                 checked={ item.done } 
-                 onChange={ () => this.toggleTodo(item) } />
-        </td>
-      </tr>)
+      <TodoRow key={ item.action } item={ item } callback={ this.toggleTodo } />)
 
-  render() {
-    return <div>
-      <h4 className="bg-primary text-white text-center p-2">
-        {this.state.username}'s Todo List
-        ({this.state.todoItems.filter(t => !t.done).length} items to do)
-      </h4>
+  render = () => 
+    <div>
+      <TodoBannner name={ this.state.username } tasks={ this.state.todoItems } />
       <div className="container-fluid">
-        <div className="my-1">
-          <input className="form-control" 
-                 value={this.state.newItemText} 
-                 onChange={this.updateNewTextValue} />
-          <button className="btn btn-primary mt-1" 
-                  onClick={this.createNewTodo}>
-            Add
-          </button>
-        </div>
+        <TodoCreator callback={ this.createNewTodo } />
         <table className="table table-striped table-bordered">
             <thead>
                 <tr>
@@ -77,5 +61,4 @@ export default class App extends Component {
         </table>
       </div>
     </div>
-  }
 }
