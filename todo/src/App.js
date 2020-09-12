@@ -83,7 +83,7 @@ export default class App extends Component {
         </div>
         
         {/* To display the completed tasks, a second table element is added which will
-            be displayed on the showCompleted prop is true. So the table and its content
+            be displayed if the showCompleted prop is true. So the table and its content
             are placed inside a data binding expression, and the && operator is used. */}
         { this.state.showCompleted && 
             <table className="table table-striped table-bordered">
