@@ -36,8 +36,9 @@ export default class App extends Component {
       this.setState({
         todoItems: [...this.state.todoItems, 
             { action: task, done: false }],
-        newItemText: ""
-      })
+        // newItemText: ""
+        // Stores the to-do items in Local Storage when a new to-do item is created.
+      }, () => localStorage.setItem("todos", JSON.stringify(this.state)))
     }
   }
 
@@ -56,6 +57,24 @@ export default class App extends Component {
                 <TodoRow key={ item.action } 
                          item={ item } 
                          callback={ this.toggleTodo } />)
+  
+  // This component lifecycle method is invoked early in the component's life, and 
+  // provides a good opportunity to perform tasks as loading data. Stored data is 
+  // retrieved using getItem. setState updates the component with the stored data
+  // or with some default data if there's no stored data available.
+  componentDidMount = () => {
+    let data = localStorage.getItem("todos")
+    this.setState(data != null 
+          ? JSON.parse(data)
+          : {
+              username: "Bah",
+              todoItems: [{ action: "Buy Flowers", done: false },
+                          { action: "Get Shoes", done: false},
+                          { action: "Collect Tickets", done: true},
+                          { action: "Call Joe", done: false}],
+              showCompleted: true
+          })
+  }
 
   render = () => 
     <div>
